@@ -65,24 +65,32 @@ def point_cloud_plot():
 
 
 def structure_factor_space(mask):
-    """Compute the structure factor of a binary mask"""
-    pts = mask.astype(float)
-    N = pts.sum()
+    """Compute the structure factor S(k) = |sum_j exp(i k . p_j)|^2 / N"""
+    ys, xs = np.nonzero(mask)
+    N = len(xs)
     if N == 0:
         return None
 
-    # fft of the binary mask = sum of complex exponentials at the defect locations
-    rho_hat = np.fft.fft2(pts)
+    # 1D grid of wave-vector values (kx and ky), centered at k = 0
+    L = mask.shape[0]
+    k = np.fft.fftshift(np.fft.fftfreq(L) * 2 * np.pi)
 
-    # structure factor = |rho_hat|^2 / N
-    S = np.abs(rho_hat)**2 / N
-    S[0, 0] = 0  # set the DC component to zero to avoid the peak at k=0
+    # Sum exp(i * (kx * x + ky * y)) over every defect (x, y)
+    total = np.zeros((L, L), dtype=complex)
+    for x, y in zip(xs, ys):
+        exp_x = np.exp(1j * k * x)
+        exp_y = np.exp(1j * k * y)
+        total += np.outer(exp_y, exp_x)  # 2D grid: exp_y[row] * exp_x[col]
 
-    # shifting origin to the center
-    return np.fft.fftshift(S)
+    # S(k) = |sum|^2 / N, excluding |k| = 0 at the center
+    S = np.abs(total)**2 / N
+    center = L // 2
+    S[center, center] = 0.0
+
+    return S
 
 def structure_factor_value(eta):
-    """Computes S(k) for negative, positive, and total defects separately"""
+    """Computes S(k) for negative, positive, and total defects"""
     q = hm.winding_number(eta)
     pos_mask = (q > 0).astype(float)
     neg_mask = (q < 0).astype(float)
