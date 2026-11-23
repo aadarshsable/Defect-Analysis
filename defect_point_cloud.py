@@ -11,7 +11,12 @@ G_hat = hm.fft_gaussian_kernel(L, sigma)
 kmag = hm.vector_magnitude(L, alpha=1000.0, H=0.0, K_ratio=0.8)
 k1, k2 = hm.perpendicular_basis(kmag, angle=0.0, L=L)
 
-widths = [("pi/32", np.pi/32),
+widths = [("pi", np.pi),
+          ("pi/2", np.pi/2),
+          ("pi/4", np.pi/4),
+          ("pi/8", np.pi/8),
+          ("pi/16", np.pi/16),
+          ("pi/32", np.pi/32),
           ("pi/64", np.pi/64),
           ("pi/128", np.pi/128),
           ("pi/256", np.pi/256)]
