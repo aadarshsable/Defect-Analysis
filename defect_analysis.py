@@ -112,13 +112,12 @@ def structure_factor_plot():
         for j, (S, title) in enumerate(panels):
             ax = axs[i, j]
             vmax = np.percentile(S, 99)
-            im = ax.imshow(S, cmap="inferno", vmin=0, vmax=vmax, origin="lower")
+            im = ax.imshow(S, cmap="hot", vmin=0, vmax=vmax, origin="lower")
             ax.set_title(title)
             ax.axis("off")
-            fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
 
     plt.tight_layout()
-    plt.savefig("structure_factor.png", dpi=300)
+    plt.savefig("structure_factor.png", dpi=150)
     print("Saved structure_factor.png")
 
 
