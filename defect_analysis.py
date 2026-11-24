@@ -130,4 +130,5 @@ def structure_factor_plot():
 
 
 if __name__ == "__main__":
+    point_cloud_plot()
     structure_factor_plot()

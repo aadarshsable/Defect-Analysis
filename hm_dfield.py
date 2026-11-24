@@ -189,4 +189,4 @@ def compare_dfields(alpha=1000.0, H=0.0, K_ratio=0.8, angle=0.0, L=2048,
 
 
 if __name__ == "__main__":
-    compare_dfields(alpha=1000.0, H=0.0, K_ratio=0.8, angle=0.0, sigma=6.0)
+    compare_dfields(alpha=1000.0, H=0.0, K_ratio=0.8, angle=0.0, sigma=6.0, crop=512)

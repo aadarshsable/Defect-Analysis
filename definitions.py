@@ -102,7 +102,14 @@ def generate_grf(alpha, H, K_ratio, K_tilde_ratio=None, L=2048, angle=0.0, angle
     # Normalize field so that max|phi(x)| = 1
     nu = 1.0 / np.max(np.abs(phi))
     phi = nu * phi
-    
+
+    # Thresholding phi to get binary field
+    for (x, y) in np.ndindex(phi.shape):
+        if phi[x, y] >= 0:
+            phi[x, y] = 1
+        else:
+            phi[x, y] = -1
+
     return spectral_density, phi
 
 def compute_signed_distance(phi, c=0.0):
@@ -165,7 +172,7 @@ def plot_row(alpha, H, K_ratio, K_tilde_ratio=None):
     # Scalar Field phi(x)
     phi_std = np.std(phi_crop)
     phi_lim = max(2.0 * phi_std, 1e-6)
-    im = axs[1].imshow(phi_crop, cmap='bwr', vmin=-phi_lim, vmax=phi_lim)
+    im = axs[1].imshow(phi_crop, cmap='binary', vmin=-phi_lim, vmax=phi_lim)
     axs[1].set_title(r'$\varphi(\mathbf{x})$')
     axs[1].axis('off')
     
@@ -193,4 +200,4 @@ if __name__ == "__main__":
     K_ratio = 0.8
 
     plot_row(alpha, H, K_ratio)
-    plt.savefig("test_grf.png", dpi=300)
+    plt.savefig("test_grf.png", dpi=150)
